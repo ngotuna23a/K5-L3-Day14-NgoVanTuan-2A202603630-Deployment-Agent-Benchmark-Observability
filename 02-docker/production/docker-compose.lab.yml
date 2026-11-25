@@ -1,0 +1,8 @@
+# Local mock lab: no env file required; keep ports isolated from other projects.
+services:
+  agent:
+    image: my-agent:advanced
+    env_file: !reset []
+  nginx:
+    ports: !override
+      - "127.0.0.1:18080:80"

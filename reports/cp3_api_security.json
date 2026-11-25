@@ -1,0 +1,1157 @@
+{
+  "executed_at": "2026-11-25T21:57:52.098951+07:00",
+  "python": "3.12.3",
+  "packages": {
+    "fastapi": "0.115.0",
+    "uvicorn": "0.30.0",
+    "pyjwt": "2.15.1",
+    "pydantic": "2.14.4"
+  },
+  "http_checks": [
+    {
+      "label": "API key: public health",
+      "url": "http://127.0.0.1:18041/health",
+      "method": "GET",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "status": "ok"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:53 GMT",
+        "server": "uvicorn",
+        "content-length": "15",
+        "content-type": "application/json"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:53 GMT\nserver: uvicorn\ncontent-length: 15\ncontent-type: application/json\n\n{\"status\":\"ok\"}"
+    },
+    {
+      "label": "API key: missing",
+      "url": "http://127.0.0.1:18041/ask",
+      "method": "POST",
+      "status": 401,
+      "expected": 401,
+      "body": {
+        "detail": "Missing API key. Include header: X-API-Key: <your-key>"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:53 GMT",
+        "server": "uvicorn",
+        "content-length": "67",
+        "content-type": "application/json"
+      },
+      "curl_i": "HTTP/1.1 401 Unauthorized\ndate: Wed, 25 Nov 2026 14:57:53 GMT\nserver: uvicorn\ncontent-length: 67\ncontent-type: application/json\n\n{\"detail\":\"Missing API key. Include header: X-API-Key: <your-key>\"}"
+    },
+    {
+      "label": "API key: incorrect",
+      "url": "http://127.0.0.1:18041/ask",
+      "method": "POST",
+      "status": 403,
+      "expected": 403,
+      "body": {
+        "detail": "Invalid API key."
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:53 GMT",
+        "server": "uvicorn",
+        "content-length": "29",
+        "content-type": "application/json"
+      },
+      "curl_i": "HTTP/1.1 403 Forbidden\ndate: Wed, 25 Nov 2026 14:57:53 GMT\nserver: uvicorn\ncontent-length: 29\ncontent-type: application/json\n\n{\"detail\":\"Invalid API key.\"}"
+    },
+    {
+      "label": "API key: valid",
+      "url": "http://127.0.0.1:18041/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "What is Docker?",
+        "answer": "Container là cách đóng gói app để chạy ở mọi nơi. Build once, run anywhere!"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:53 GMT",
+        "server": "uvicorn",
+        "content-length": "132",
+        "content-type": "application/json"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:53 GMT\nserver: uvicorn\ncontent-length: 132\ncontent-type: application/json\n\n{\"question\":\"What is Docker?\",\"answer\":\"Container là cách đóng gói app để chạy ở mọi nơi. Build once, run anywhere!\"}"
+    },
+    {
+      "label": "API key: empty question",
+      "url": "http://127.0.0.1:18041/ask",
+      "method": "POST",
+      "status": 422,
+      "expected": 422,
+      "body": {
+        "detail": "question is required"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:53 GMT",
+        "server": "uvicorn",
+        "content-length": "33",
+        "content-type": "application/json"
+      },
+      "curl_i": "HTTP/1.1 422 Unprocessable Entity\ndate: Wed, 25 Nov 2026 14:57:53 GMT\nserver: uvicorn\ncontent-length: 33\ncontent-type: application/json\n\n{\"detail\":\"question is required\"}"
+    },
+    {
+      "label": "API key rotation: old key rejected",
+      "url": "http://127.0.0.1:18041/ask",
+      "method": "POST",
+      "status": 403,
+      "expected": 403,
+      "body": {
+        "detail": "Invalid API key."
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:55 GMT",
+        "server": "uvicorn",
+        "content-length": "29",
+        "content-type": "application/json"
+      },
+      "curl_i": "HTTP/1.1 403 Forbidden\ndate: Wed, 25 Nov 2026 14:57:55 GMT\nserver: uvicorn\ncontent-length: 29\ncontent-type: application/json\n\n{\"detail\":\"Invalid API key.\"}"
+    },
+    {
+      "label": "API key rotation: new key accepted",
+      "url": "http://127.0.0.1:18041/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "What is Docker?",
+        "answer": "Container là cách đóng gói app để chạy ở mọi nơi. Build once, run anywhere!"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:55 GMT",
+        "server": "uvicorn",
+        "content-length": "132",
+        "content-type": "application/json"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:55 GMT\nserver: uvicorn\ncontent-length: 132\ncontent-type: application/json\n\n{\"question\":\"What is Docker?\",\"answer\":\"Container là cách đóng gói app để chạy ở mọi nơi. Build once, run anywhere!\"}"
+    },
+    {
+      "label": "JWT: public health",
+      "url": "http://127.0.0.1:18042/health",
+      "method": "GET",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "status": "ok",
+        "uptime_seconds": 0.3,
+        "security": "JWT + RateLimit + CostGuard",
+        "timestamp": "2026-11-25T14:57:58.423444+00:00"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "124",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 124\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"status\":\"ok\",\"uptime_seconds\":0.3,\"security\":\"JWT + RateLimit + CostGuard\",\"timestamp\":\"2026-11-25T14:57:58.423444+00:00\"}"
+    },
+    {
+      "label": "JWT: missing",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 401,
+      "expected": 401,
+      "body": {
+        "detail": "Authentication required. Include: Authorization: Bearer <token>"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "www-authenticate": "Bearer",
+        "content-length": "76",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 401 Unauthorized\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\nwww-authenticate: Bearer\ncontent-length: 76\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":\"Authentication required. Include: Authorization: Bearer <token>\"}"
+    },
+    {
+      "label": "JWT: malformed",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 403,
+      "expected": 403,
+      "body": {
+        "detail": "Invalid token."
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "27",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 403 Forbidden\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 27\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":\"Invalid token.\"}"
+    },
+    {
+      "label": "JWT: expired",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 401,
+      "expected": 401,
+      "body": {
+        "detail": "Token expired. Please login again."
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "47",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 401 Unauthorized\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 47\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":\"Token expired. Please login again.\"}"
+    },
+    {
+      "label": "JWT: wrong signature and elevated role",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 403,
+      "expected": 403,
+      "body": {
+        "detail": "Invalid token."
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "27",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 403 Forbidden\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 27\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":\"Invalid token.\"}"
+    },
+    {
+      "label": "Login: invalid credentials",
+      "url": "http://127.0.0.1:18042/auth/token",
+      "method": "POST",
+      "status": 401,
+      "expected": 401,
+      "body": {
+        "detail": "Invalid credentials"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "32",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 401 Unauthorized\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 32\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":\"Invalid credentials\"}"
+    },
+    {
+      "label": "Login: student",
+      "url": "http://127.0.0.1:18042/auth/token",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "access_token": "<REDACTED>",
+        "token_type": "bearer",
+        "expires_in_minutes": 60,
+        "hint": "<REDACTED>"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "307",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 307\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"access_token\":\"<REDACTED>\",\"token_type\":\"bearer\",\"expires_in_minutes\":60,\"hint\":\"<REDACTED>\"}"
+    },
+    {
+      "label": "Rate limit student: request 1",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "Test 1",
+        "answer": "Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.",
+        "usage": {
+          "requests_remaining": 9,
+          "budget_remaining_usd": 2.1e-05
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "210",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 210\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"Test 1\",\"answer\":\"Đây là câu trả lời từ AI agent (mock). Trong production, đây sẽ là response từ OpenAI/Anthropic.\",\"usage\":{\"requests_remaining\":9,\"budget_remaining_usd\":2.1e-05}}"
+    },
+    {
+      "label": "Rate limit student: request 2",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "Test 2",
+        "answer": "Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.",
+        "usage": {
+          "requests_remaining": 8,
+          "budget_remaining_usd": 3.7e-05
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "179",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 179\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"Test 2\",\"answer\":\"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.\",\"usage\":{\"requests_remaining\":8,\"budget_remaining_usd\":3.7e-05}}"
+    },
+    {
+      "label": "Rate limit student: request 3",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "Test 3",
+        "answer": "Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.",
+        "usage": {
+          "requests_remaining": 7,
+          "budget_remaining_usd": 5.3e-05
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "179",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 179\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"Test 3\",\"answer\":\"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.\",\"usage\":{\"requests_remaining\":7,\"budget_remaining_usd\":5.3e-05}}"
+    },
+    {
+      "label": "Rate limit student: request 4",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "Test 4",
+        "answer": "Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.",
+        "usage": {
+          "requests_remaining": 6,
+          "budget_remaining_usd": 7.2e-05
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "187",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 187\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"Test 4\",\"answer\":\"Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận.\",\"usage\":{\"requests_remaining\":6,\"budget_remaining_usd\":7.2e-05}}"
+    },
+    {
+      "label": "Rate limit student: request 5",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "Test 5",
+        "answer": "Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.",
+        "usage": {
+          "requests_remaining": 5,
+          "budget_remaining_usd": 8.8e-05
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "179",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 179\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"Test 5\",\"answer\":\"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.\",\"usage\":{\"requests_remaining\":5,\"budget_remaining_usd\":8.8e-05}}"
+    },
+    {
+      "label": "Rate limit student: request 6",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "Test 6",
+        "answer": "Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.",
+        "usage": {
+          "requests_remaining": 4,
+          "budget_remaining_usd": 0.000104
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "180",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 180\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"Test 6\",\"answer\":\"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.\",\"usage\":{\"requests_remaining\":4,\"budget_remaining_usd\":0.000104}}"
+    },
+    {
+      "label": "Rate limit student: request 7",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "Test 7",
+        "answer": "Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.",
+        "usage": {
+          "requests_remaining": 3,
+          "budget_remaining_usd": 0.000121
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "180",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 180\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"Test 7\",\"answer\":\"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.\",\"usage\":{\"requests_remaining\":3,\"budget_remaining_usd\":0.000121}}"
+    },
+    {
+      "label": "Rate limit student: request 8",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "Test 8",
+        "answer": "Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.",
+        "usage": {
+          "requests_remaining": 2,
+          "budget_remaining_usd": 0.000137
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:58 GMT",
+        "server": "uvicorn",
+        "content-length": "180",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:58 GMT\nserver: uvicorn\ncontent-length: 180\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"Test 8\",\"answer\":\"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.\",\"usage\":{\"requests_remaining\":2,\"budget_remaining_usd\":0.000137}}"
+    },
+    {
+      "label": "Rate limit student: request 9",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "Test 9",
+        "answer": "Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.",
+        "usage": {
+          "requests_remaining": 1,
+          "budget_remaining_usd": 0.000153
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "content-length": "180",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\ncontent-length: 180\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"Test 9\",\"answer\":\"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.\",\"usage\":{\"requests_remaining\":1,\"budget_remaining_usd\":0.000153}}"
+    },
+    {
+      "label": "Rate limit student: request 10",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "Test 10",
+        "answer": "Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.",
+        "usage": {
+          "requests_remaining": 0,
+          "budget_remaining_usd": 0.000169
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "content-length": "181",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\ncontent-length: 181\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"Test 10\",\"answer\":\"Agent đang hoạt động tốt! (mock response) Hỏi thêm câu hỏi đi nhé.\",\"usage\":{\"requests_remaining\":0,\"budget_remaining_usd\":0.000169}}"
+    },
+    {
+      "label": "Rate limit student: request 11",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 429,
+      "expected": 429,
+      "body": {
+        "detail": {
+          "error": "Rate limit exceeded",
+          "limit": 10,
+          "window_seconds": 60,
+          "retry_after_seconds": 59
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "x-ratelimit-limit": "10",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "1795618739",
+        "retry-after": "59",
+        "content-length": "98",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 429 Too Many Requests\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\nx-ratelimit-limit: 10\nx-ratelimit-remaining: 0\nx-ratelimit-reset: 1795618739\nretry-after: 59\ncontent-length: 98\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":{\"error\":\"Rate limit exceeded\",\"limit\":10,\"window_seconds\":60,\"retry_after_seconds\":59}}"
+    },
+    {
+      "label": "Rate limit student: request 12",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 429,
+      "expected": 429,
+      "body": {
+        "detail": {
+          "error": "Rate limit exceeded",
+          "limit": 10,
+          "window_seconds": 60,
+          "retry_after_seconds": 59
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "x-ratelimit-limit": "10",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "1795618739",
+        "retry-after": "59",
+        "content-length": "98",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 429 Too Many Requests\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\nx-ratelimit-limit: 10\nx-ratelimit-remaining: 0\nx-ratelimit-reset: 1795618739\nretry-after: 59\ncontent-length: 98\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":{\"error\":\"Rate limit exceeded\",\"limit\":10,\"window_seconds\":60,\"retry_after_seconds\":59}}"
+    },
+    {
+      "label": "Rate limit student: request 13",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 429,
+      "expected": 429,
+      "body": {
+        "detail": {
+          "error": "Rate limit exceeded",
+          "limit": 10,
+          "window_seconds": 60,
+          "retry_after_seconds": 59
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "x-ratelimit-limit": "10",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "1795618739",
+        "retry-after": "59",
+        "content-length": "98",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 429 Too Many Requests\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\nx-ratelimit-limit: 10\nx-ratelimit-remaining: 0\nx-ratelimit-reset: 1795618739\nretry-after: 59\ncontent-length: 98\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":{\"error\":\"Rate limit exceeded\",\"limit\":10,\"window_seconds\":60,\"retry_after_seconds\":59}}"
+    },
+    {
+      "label": "Rate limit student: request 14",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 429,
+      "expected": 429,
+      "body": {
+        "detail": {
+          "error": "Rate limit exceeded",
+          "limit": 10,
+          "window_seconds": 60,
+          "retry_after_seconds": 59
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "x-ratelimit-limit": "10",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "1795618739",
+        "retry-after": "59",
+        "content-length": "98",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 429 Too Many Requests\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\nx-ratelimit-limit: 10\nx-ratelimit-remaining: 0\nx-ratelimit-reset: 1795618739\nretry-after: 59\ncontent-length: 98\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":{\"error\":\"Rate limit exceeded\",\"limit\":10,\"window_seconds\":60,\"retry_after_seconds\":59}}"
+    },
+    {
+      "label": "Rate limit student: request 15",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 429,
+      "expected": 429,
+      "body": {
+        "detail": {
+          "error": "Rate limit exceeded",
+          "limit": 10,
+          "window_seconds": 60,
+          "retry_after_seconds": 59
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "x-ratelimit-limit": "10",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "1795618739",
+        "retry-after": "59",
+        "content-length": "98",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 429 Too Many Requests\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\nx-ratelimit-limit: 10\nx-ratelimit-remaining: 0\nx-ratelimit-reset: 1795618739\nretry-after: 59\ncontent-length: 98\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":{\"error\":\"Rate limit exceeded\",\"limit\":10,\"window_seconds\":60,\"retry_after_seconds\":59}}"
+    },
+    {
+      "label": "Rate limit student: request 16",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 429,
+      "expected": 429,
+      "body": {
+        "detail": {
+          "error": "Rate limit exceeded",
+          "limit": 10,
+          "window_seconds": 60,
+          "retry_after_seconds": 59
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "x-ratelimit-limit": "10",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "1795618739",
+        "retry-after": "59",
+        "content-length": "98",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 429 Too Many Requests\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\nx-ratelimit-limit: 10\nx-ratelimit-remaining: 0\nx-ratelimit-reset: 1795618739\nretry-after: 59\ncontent-length: 98\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":{\"error\":\"Rate limit exceeded\",\"limit\":10,\"window_seconds\":60,\"retry_after_seconds\":59}}"
+    },
+    {
+      "label": "Rate limit student: request 17",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 429,
+      "expected": 429,
+      "body": {
+        "detail": {
+          "error": "Rate limit exceeded",
+          "limit": 10,
+          "window_seconds": 60,
+          "retry_after_seconds": 59
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "x-ratelimit-limit": "10",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "1795618739",
+        "retry-after": "59",
+        "content-length": "98",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 429 Too Many Requests\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\nx-ratelimit-limit: 10\nx-ratelimit-remaining: 0\nx-ratelimit-reset: 1795618739\nretry-after: 59\ncontent-length: 98\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":{\"error\":\"Rate limit exceeded\",\"limit\":10,\"window_seconds\":60,\"retry_after_seconds\":59}}"
+    },
+    {
+      "label": "Rate limit student: request 18",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 429,
+      "expected": 429,
+      "body": {
+        "detail": {
+          "error": "Rate limit exceeded",
+          "limit": 10,
+          "window_seconds": 60,
+          "retry_after_seconds": 59
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "x-ratelimit-limit": "10",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "1795618739",
+        "retry-after": "59",
+        "content-length": "98",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 429 Too Many Requests\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\nx-ratelimit-limit: 10\nx-ratelimit-remaining: 0\nx-ratelimit-reset: 1795618739\nretry-after: 59\ncontent-length: 98\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":{\"error\":\"Rate limit exceeded\",\"limit\":10,\"window_seconds\":60,\"retry_after_seconds\":59}}"
+    },
+    {
+      "label": "Rate limit student: request 19",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 429,
+      "expected": 429,
+      "body": {
+        "detail": {
+          "error": "Rate limit exceeded",
+          "limit": 10,
+          "window_seconds": 60,
+          "retry_after_seconds": 59
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "x-ratelimit-limit": "10",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "1795618739",
+        "retry-after": "59",
+        "content-length": "98",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 429 Too Many Requests\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\nx-ratelimit-limit: 10\nx-ratelimit-remaining: 0\nx-ratelimit-reset: 1795618739\nretry-after: 59\ncontent-length: 98\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":{\"error\":\"Rate limit exceeded\",\"limit\":10,\"window_seconds\":60,\"retry_after_seconds\":59}}"
+    },
+    {
+      "label": "Rate limit student: request 20",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 429,
+      "expected": 429,
+      "body": {
+        "detail": {
+          "error": "Rate limit exceeded",
+          "limit": 10,
+          "window_seconds": 60,
+          "retry_after_seconds": 59
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "x-ratelimit-limit": "10",
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "1795618739",
+        "retry-after": "59",
+        "content-length": "98",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 429 Too Many Requests\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\nx-ratelimit-limit: 10\nx-ratelimit-remaining: 0\nx-ratelimit-reset: 1795618739\nretry-after: 59\ncontent-length: 98\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":{\"error\":\"Rate limit exceeded\",\"limit\":10,\"window_seconds\":60,\"retry_after_seconds\":59}}"
+    },
+    {
+      "label": "Usage: student after loop",
+      "url": "http://127.0.0.1:18042/me/usage",
+      "method": "GET",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "user_id": "student",
+        "date": "2026-11-25",
+        "requests": 10,
+        "input_tokens": 40,
+        "output_tokens": 272,
+        "cost_usd": 0.000169,
+        "budget_usd": 1.0,
+        "budget_remaining_usd": 0.999831,
+        "budget_used_pct": 0.0
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "content-length": "184",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\ncontent-length: 184\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"user_id\":\"student\",\"date\":\"2026-11-25\",\"requests\":10,\"input_tokens\":40,\"output_tokens\":272,\"cost_usd\":0.000169,\"budget_usd\":1.0,\"budget_remaining_usd\":0.999831,\"budget_used_pct\":0.0}"
+    },
+    {
+      "label": "Role: student denied admin stats",
+      "url": "http://127.0.0.1:18042/admin/stats",
+      "method": "GET",
+      "status": 403,
+      "expected": 403,
+      "body": {
+        "detail": "Admin only"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "content-length": "23",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 403 Forbidden\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\ncontent-length: 23\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":\"Admin only\"}"
+    },
+    {
+      "label": "Login: teacher",
+      "url": "http://127.0.0.1:18042/auth/token",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "access_token": "<REDACTED>",
+        "token_type": "bearer",
+        "expires_in_minutes": 60,
+        "hint": "<REDACTED>"
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "content-length": "308",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\ncontent-length: 308\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"access_token\":\"<REDACTED>\",\"token_type\":\"bearer\",\"expires_in_minutes\":60,\"hint\":\"<REDACTED>\"}"
+    },
+    {
+      "label": "Role: admin has separate higher quota",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "question": "What is Docker?",
+        "answer": "Container là cách đóng gói app để chạy ở mọi nơi. Build once, run anywhere!",
+        "usage": {
+          "requests_remaining": 99,
+          "budget_remaining_usd": 1.9e-05
+        }
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "content-length": "197",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\ncontent-length: 197\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"question\":\"What is Docker?\",\"answer\":\"Container là cách đóng gói app để chạy ở mọi nơi. Build once, run anywhere!\",\"usage\":{\"requests_remaining\":99,\"budget_remaining_usd\":1.9e-05}}"
+    },
+    {
+      "label": "Role: admin stats accepted",
+      "url": "http://127.0.0.1:18042/admin/stats",
+      "method": "GET",
+      "status": 200,
+      "expected": 200,
+      "body": {
+        "total_users": "N/A (in-memory demo)",
+        "global_cost_usd": 0.00018809999999999996,
+        "global_budget_usd": 10.0
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "content-length": "104",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 200 OK\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\ncontent-length: 104\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"total_users\":\"N/A (in-memory demo)\",\"global_cost_usd\":0.00018809999999999996,\"global_budget_usd\":10.0}"
+    },
+    {
+      "label": "Input: empty question",
+      "url": "http://127.0.0.1:18042/ask",
+      "method": "POST",
+      "status": 422,
+      "expected": 422,
+      "body": {
+        "detail": [
+          {
+            "type": "string_too_short",
+            "loc": [
+              "body",
+              "question"
+            ],
+            "msg": "String should have at least 1 character",
+            "input": "",
+            "ctx": {
+              "min_length": 1
+            }
+          }
+        ]
+      },
+      "response_headers": {
+        "date": "Wed, 25 Nov 2026 14:57:59 GMT",
+        "server": "uvicorn",
+        "content-length": "148",
+        "content-type": "application/json",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block",
+        "referrer-policy": "strict-origin-when-cross-origin"
+      },
+      "curl_i": "HTTP/1.1 422 Unprocessable Entity\ndate: Wed, 25 Nov 2026 14:57:59 GMT\nserver: uvicorn\ncontent-length: 148\ncontent-type: application/json\nx-content-type-options: nosniff\nx-frame-options: DENY\nx-xss-protection: 1; mode=block\nreferrer-policy: strict-origin-when-cross-origin\n\n{\"detail\":[{\"type\":\"string_too_short\",\"loc\":[\"body\",\"question\"],\"msg\":\"String should have at least 1 character\",\"input\":\"\",\"ctx\":{\"min_length\":1}}]}"
+    }
+  ],
+  "servers": {
+    "api_key_before_rotation": {
+      "port": 18041,
+      "pid": 2076,
+      "variant": "develop",
+      "exit_code": -15,
+      "shutdown_complete": true
+    },
+    "api_key_after_rotation": {
+      "port": 18041,
+      "pid": 2087,
+      "variant": "develop",
+      "exit_code": -15,
+      "shutdown_complete": true
+    },
+    "jwt": {
+      "port": 18042,
+      "pid": 2095,
+      "variant": "production",
+      "exit_code": -15,
+      "shutdown_complete": true
+    }
+  },
+  "rate_limit_sequence": [
+    {
+      "request": 1,
+      "status": 200
+    },
+    {
+      "request": 2,
+      "status": 200
+    },
+    {
+      "request": 3,
+      "status": 200
+    },
+    {
+      "request": 4,
+      "status": 200
+    },
+    {
+      "request": 5,
+      "status": 200
+    },
+    {
+      "request": 6,
+      "status": 200
+    },
+    {
+      "request": 7,
+      "status": 200
+    },
+    {
+      "request": 8,
+      "status": 200
+    },
+    {
+      "request": 9,
+      "status": 200
+    },
+    {
+      "request": 10,
+      "status": 200
+    },
+    {
+      "request": 11,
+      "status": 429
+    },
+    {
+      "request": 12,
+      "status": 429
+    },
+    {
+      "request": 13,
+      "status": 429
+    },
+    {
+      "request": 14,
+      "status": 429
+    },
+    {
+      "request": 15,
+      "status": 429
+    },
+    {
+      "request": 16,
+      "status": 429
+    },
+    {
+      "request": 17,
+      "status": 429
+    },
+    {
+      "request": 18,
+      "status": 429
+    },
+    {
+      "request": 19,
+      "status": 429
+    },
+    {
+      "request": 20,
+      "status": 429
+    }
+  ],
+  "cost_guard_synthetic_checks": [
+    {
+      "label": "Fresh default budget allows request",
+      "expected": "allowed",
+      "observed": "allowed",
+      "detail": null
+    },
+    {
+      "label": "Synthetic user budget exhausted",
+      "expected": 402,
+      "observed": 402,
+      "detail": {
+        "error": "Daily budget exceeded",
+        "used_usd": 0.00075,
+        "budget_usd": 0.0005,
+        "resets_at": "midnight UTC"
+      }
+    },
+    {
+      "label": "Synthetic global budget exhausted",
+      "expected": 503,
+      "observed": 503,
+      "detail": "Service temporarily unavailable due to budget limits. Try again tomorrow."
+    }
+  ],
+  "jwt_claims_verified": {
+    "sub": "student",
+    "role": "user",
+    "algorithm": "HS256",
+    "lifetime_seconds": 3600
+  },
+  "usage_field_observation": {
+    "ask_budget_remaining_usd": 0.000169,
+    "usage_cost_usd": 0.000169,
+    "usage_budget_remaining_usd": 0.999831,
+    "usage_budget_usd": 1.0
+  },
+  "cost_guard_test_scope": "Direct calls to CostGuard with synthetic token counts and small fixture budgets; not HTTP responses or actual provider spending.",
+  "cost_guard_rollover_observation": {
+    "simulation": "Mark user record as an earlier day, then read usage.",
+    "user_cost_after_reset": 0.0,
+    "global_cost_after_user_reset": 0.0007499999999999999
+  },
+  "pip_check": "No broken requirements found.",
+  "http_checks_passed": 40,
+  "result": "PASS",
+  "all_test_servers_stopped": true,
+  "sensitive_values_redacted": true
+}

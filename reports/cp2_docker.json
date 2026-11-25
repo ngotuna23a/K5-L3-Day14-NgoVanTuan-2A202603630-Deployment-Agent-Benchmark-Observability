@@ -1,0 +1,258 @@
+{
+    "executed_at":  "2026-11-25T20:52:43.687596+07:00",
+    "docker_engine":  "29.9.3",
+    "images":  {
+                   "my-agent:develop":  {
+                                            "id":  "sha256:2fdba6dfa453c96e849ed6e3462229eefdc059e31fd1853ebbc8f4fce7551a77",
+                                            "size_bytes":  1667784235,
+                                            "size_mb_decimal":  1667.784235,
+                                            "configured_user":  "root (default)",
+                                            "workdir":  "/app",
+                                            "cmd":  [
+                                                        "python",
+                                                        "app.py"
+                                                    ]
+                                        },
+                   "my-agent:advanced":  {
+                                             "id":  "sha256:b65c41be0205a112496a9c33862e741c62cf2b5fcb9e7893c4417c38747b64fc",
+                                             "size_bytes":  239815305,
+                                             "size_mb_decimal":  239.815305,
+                                             "configured_user":  "appuser",
+                                             "workdir":  "/app",
+                                             "cmd":  [
+                                                         "uvicorn",
+                                                         "main:app",
+                                                         "--host",
+                                                         "0.0.0.0",
+                                                         "--port",
+                                                         "8000",
+                                                         "--workers",
+                                                         "2"
+                                                     ]
+                                         }
+               },
+    "http_checks":  [
+                        {
+                            "label":  "develop: GET /health",
+                            "url":  "http://127.0.0.1:18001/health",
+                            "status":  200,
+                            "expected":  200,
+                            "body":  {
+                                         "status":  "ok",
+                                         "uptime_seconds":  0.9,
+                                         "container":  true
+                                     },
+                            "response_headers":  {
+                                                     "server":  "uvicorn"
+                                                 }
+                        },
+                        {
+                            "label":  "develop: POST /ask query",
+                            "url":  "http://127.0.0.1:18001/ask?question=What%20is%20Docker%3F",
+                            "status":  200,
+                            "expected":  200,
+                            "body":  {
+                                         "answer":  "Container là cách đóng gói app để chạy ở mọi nơi. Build once, run anywhere!"
+                                     },
+                            "response_headers":  {
+                                                     "server":  "uvicorn"
+                                                 }
+                        },
+                        {
+                            "label":  "develop: POST /ask JSON",
+                            "url":  "http://127.0.0.1:18001/ask",
+                            "status":  422,
+                            "expected":  422,
+                            "body":  {
+                                         "detail":  [
+                                                        {
+                                                            "type":  "missing",
+                                                            "loc":  [
+                                                                        "query",
+                                                                        "question"
+                                                                    ],
+                                                            "msg":  "Field required",
+                                                            "input":  null
+                                                        }
+                                                    ]
+                                     },
+                            "response_headers":  {
+                                                     "server":  "uvicorn"
+                                                 }
+                        },
+                        {
+                            "label":  "advanced: GET /health",
+                            "url":  "http://127.0.0.1:18002/health",
+                            "status":  200,
+                            "expected":  200,
+                            "body":  {
+                                         "status":  "ok",
+                                         "uptime_seconds":  1.8,
+                                         "version":  "2.0.0",
+                                         "timestamp":  "2026-11-25T13:52:49.265908"
+                                     },
+                            "response_headers":  {
+                                                     "server":  "uvicorn"
+                                                 }
+                        },
+                        {
+                            "label":  "advanced: GET /ready",
+                            "url":  "http://127.0.0.1:18002/ready",
+                            "status":  200,
+                            "expected":  200,
+                            "body":  {
+                                         "ready":  true
+                                     },
+                            "response_headers":  {
+                                                     "server":  "uvicorn"
+                                                 }
+                        },
+                        {
+                            "label":  "advanced: POST /ask JSON",
+                            "url":  "http://127.0.0.1:18002/ask",
+                            "status":  200,
+                            "expected":  200,
+                            "body":  {
+                                         "answer":  "Container là cách đóng gói app để chạy ở mọi nơi. Build once, run anywhere!"
+                                     },
+                            "response_headers":  {
+                                                     "server":  "uvicorn"
+                                                 }
+                        },
+                        {
+                            "label":  "advanced: POST /ask empty JSON",
+                            "url":  "http://127.0.0.1:18002/ask",
+                            "status":  422,
+                            "expected":  422,
+                            "body":  {
+                                         "detail":  "question required"
+                                     },
+                            "response_headers":  {
+                                                     "server":  "uvicorn"
+                                                 }
+                        },
+                        {
+                            "label":  "nginx: GET /health",
+                            "url":  "http://127.0.0.1:18080/health",
+                            "status":  200,
+                            "expected":  200,
+                            "body":  {
+                                         "status":  "ok",
+                                         "uptime_seconds":  87.8,
+                                         "version":  "2.0.0",
+                                         "timestamp":  "2026-11-25T13:52:51.283296"
+                                     },
+                            "response_headers":  {
+                                                     "server":  "nginx",
+                                                     "x-frame-options":  "DENY",
+                                                     "x-content-type-options":  "nosniff"
+                                                 }
+                        },
+                        {
+                            "label":  "nginx: GET /ready",
+                            "url":  "http://127.0.0.1:18080/ready",
+                            "status":  200,
+                            "expected":  200,
+                            "body":  {
+                                         "ready":  true
+                                     },
+                            "response_headers":  {
+                                                     "server":  "nginx",
+                                                     "x-frame-options":  "DENY",
+                                                     "x-content-type-options":  "nosniff"
+                                                 }
+                        },
+                        {
+                            "label":  "nginx: POST /ask JSON",
+                            "url":  "http://127.0.0.1:18080/ask",
+                            "status":  200,
+                            "expected":  200,
+                            "body":  {
+                                         "answer":  "Tôi là AI agent được deploy lên cloud. Câu hỏi của bạn đã được nhận."
+                                     },
+                            "response_headers":  {
+                                                     "server":  "nginx",
+                                                     "x-frame-options":  "DENY",
+                                                     "x-content-type-options":  "nosniff"
+                                                 }
+                        },
+                        {
+                            "label":  "nginx: POST /ask empty JSON",
+                            "url":  "http://127.0.0.1:18080/ask",
+                            "status":  422,
+                            "expected":  422,
+                            "body":  {
+                                         "detail":  "question required"
+                                     },
+                            "response_headers":  {
+                                                     "server":  "nginx"
+                                                 }
+                        }
+                    ],
+    "containers":  {
+                       "develop":  {
+                                       "name":  "k5-day14-cp2-develop",
+                                       "host_port":  18001,
+                                       "uid":  0,
+                                       "pip_check":  "No broken requirements found.",
+                                       "python":  "Python 3.11.18"
+                                   },
+                       "advanced":  {
+                                        "name":  "k5-day14-cp2-advanced",
+                                        "host_port":  18002,
+                                        "uid":  999,
+                                        "pip_check":  "No broken requirements found.",
+                                        "python":  "Python 3.11.18",
+                                        "docker_health":  "healthy"
+                                    }
+                   },
+    "compose_services":  [
+                             {
+                                 "Service":  "agent",
+                                 "Name":  "k5-day14-docker-agent-1",
+                                 "Image":  "my-agent:advanced",
+                                 "State":  "running",
+                                 "Health":  "healthy",
+                                 "Ports":  "8000/tcp"
+                             },
+                             {
+                                 "Service":  "nginx",
+                                 "Name":  "k5-day14-docker-nginx-1",
+                                 "Image":  "nginx:alpine",
+                                 "State":  "running",
+                                 "Health":  "",
+                                 "Ports":  "127.0.0.1:18080-\u003e80/tcp"
+                             },
+                             {
+                                 "Service":  "qdrant",
+                                 "Name":  "k5-day14-docker-qdrant-1",
+                                 "Image":  "qdrant/qdrant:v1.9.0",
+                                 "State":  "running",
+                                 "Health":  "healthy",
+                                 "Ports":  "6333-6334/tcp"
+                             },
+                             {
+                                 "Service":  "redis",
+                                 "Name":  "k5-day14-docker-redis-1",
+                                 "Image":  "redis:7-alpine",
+                                 "State":  "running",
+                                 "Health":  "healthy",
+                                 "Ports":  "6379/tcp"
+                             }
+                         ],
+    "infrastructure_checks":  {
+                                  "redis_ping":  "PONG",
+                                  "agent_to_qdrant_http":  200,
+                                  "nginx_config":  "nginx -t exited 0"
+                              },
+    "image_size_reduction_percent":  85.620724,
+    "docker_images_output":  "my-agent:develop | 1.67GB\nmy-agent:advanced | 240MB",
+    "http_checks_passed":  11,
+    "result":  "PASS",
+    "standalone_containers_stopped":  [
+                                          "k5-day14-cp2-develop",
+                                          "k5-day14-cp2-advanced"
+                                      ],
+    "compose_stack_stopped":  true,
+    "compose_named_volumes_preserved":  true
+}
